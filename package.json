@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/robin-drexler/Simple-Chrome-Extension-Content-Script-Skeleton",
   "devDependencies": {
+    "babelify": "^6.1.3",
     "gulp": "^3.8.11",
     "gulp-watch": "^4.1.1",
     "socket.io": "^1.3.4"
