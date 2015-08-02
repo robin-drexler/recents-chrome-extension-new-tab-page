@@ -5725,36 +5725,64 @@ throw new Error(message);}catch(x) {}}};}module.exports = warning;},{"114":114}]
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
-'use strict';
+"use strict";
 
-var sitesService = require('./sitesService');
-var React = require('./React');
-sitesService.getSites();
-
-var TopSites = React.createClass({
-  displayName: 'TopSites',
-
-  render: function render() {
-    return React.createElement(Site, { title: 'Hello Waaaaaald' });
-  }
-});
-
-// tutorial1.js
-var Site = React.createClass({
-  displayName: 'Site',
+var React = require('../React');
+module.exports = React.createClass({
+  displayName: "exports",
 
   render: function render() {
     return React.createElement(
-      'div',
-      { className: 'site' },
+      "div",
+      { className: "site" },
       this.props.title
     );
   }
 });
 
+},{"../React":1}],3:[function(require,module,exports){
+'use strict';
+
+var React = require('../React');
+var Site = require('./Site');
+
+module.exports = React.createClass({
+  displayName: 'exports',
+
+  getInitialState: function getInitialState() {
+
+    return {
+      topSites: []
+    };
+  },
+  componentDidMount: function componentDidMount() {
+    this.setState({
+      topSites: [{
+        title: 'Jimdo, #funworks'
+      }]
+    });
+  },
+  render: function render() {
+    return React.createElement(
+      'div',
+      null,
+      this.state.topSites.map(function (site) {
+        return React.createElement(Site, { title: site.title });
+      })
+    );
+  }
+});
+
+},{"../React":1,"./Site":2}],4:[function(require,module,exports){
+'use strict';
+
+var sitesService = require('./sitesService');
+var React = require('./React');
+var TopSites = require('./components/TopSites');
+
 React.render(React.createElement(TopSites, null), document.getElementById('content'));
 
-},{"./React":1,"./sitesService":3}],3:[function(require,module,exports){
+},{"./React":1,"./components/TopSites":3,"./sitesService":5}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -5763,4 +5791,4 @@ module.exports = {
   }
 };
 
-},{}]},{},[2]);
+},{}]},{},[4]);

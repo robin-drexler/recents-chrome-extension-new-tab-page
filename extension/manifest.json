@@ -8,6 +8,7 @@
   },
   "description": "Yay, I'm so useless.",
   "permissions": [
+    "topSites"
   ],
   "chrome_url_overrides": {
     "newtab": "/html/ntp.html"
