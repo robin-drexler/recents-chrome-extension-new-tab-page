@@ -13,5 +13,10 @@
   "chrome_url_overrides": {
     "newtab": "/html/ntp.html"
   },
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ]
+  },
   "manifest_version": 2
 }

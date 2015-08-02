@@ -5745,22 +5745,22 @@ module.exports = React.createClass({
 
 var React = require('../React');
 var Site = require('./Site');
+var sitesService = require('../sitesService');
 
 module.exports = React.createClass({
   displayName: 'exports',
 
   getInitialState: function getInitialState() {
-
     return {
       topSites: []
     };
   },
   componentDidMount: function componentDidMount() {
-    this.setState({
-      topSites: [{
-        title: 'Jimdo, #funworks'
-      }]
-    });
+    sitesService.getSites().then((function (sites) {
+      this.setState({
+        topSites: sites
+      });
+    }).bind(this));
   },
   render: function render() {
     return React.createElement(
@@ -5773,7 +5773,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"../React":1,"./Site":2}],4:[function(require,module,exports){
+},{"../React":1,"../sitesService":5,"./Site":2}],4:[function(require,module,exports){
 'use strict';
 
 var sitesService = require('./sitesService');
@@ -5783,11 +5783,21 @@ var TopSites = require('./components/TopSites');
 React.render(React.createElement(TopSites, null), document.getElementById('content'));
 
 },{"./React":1,"./components/TopSites":3,"./sitesService":5}],5:[function(require,module,exports){
-'use strict';
+"use strict";
 
 module.exports = {
   getSites: function getSites() {
-    console.log('lawl');
+    return new Promise(function (resolve) {
+      chrome.extension.sendMessage({ purpose: "getTopSites" }, function (response) {
+        var sites = response.sites;
+
+        sites.map(function (site) {
+          site.faviconURL = site.url.split('/')[2];
+        });
+
+        resolve(sites);
+      });
+    });
   }
 };
 

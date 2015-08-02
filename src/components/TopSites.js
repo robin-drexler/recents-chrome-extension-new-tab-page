@@ -1,21 +1,19 @@
 var React = require('../React');
 var Site = require('./Site');
+var sitesService = require('../sitesService');
 
 module.exports = React.createClass({
   getInitialState: function() {
-
     return {
       topSites: []
     }
   },
   componentDidMount: function() {
-    this.setState({
-      topSites: [
-        {
-          title: 'Jimdo, #funworks'
-        }
-      ]
-    })
+    sitesService.getSites().then(function (sites) {
+      this.setState({
+        topSites: sites
+      })
+    }.bind(this));
   },
   render: function() {
     return (
