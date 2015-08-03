@@ -5,7 +5,8 @@ module.exports = {
         var sites = response.sites;
 
         sites.map(function (site) {
-          site.faviconURL = site.url.split('/')[2];
+          var faviconDomain = site.url.split('/')[2];
+          site.faviconURL = 'http://www.google.com/s2/favicons?domain=' + faviconDomain;
         });
 
         resolve(sites);

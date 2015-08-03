@@ -5733,9 +5733,14 @@ module.exports = React.createClass({
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "site" },
-      this.props.title
+      "a",
+      { className: "site site-link", href: this.props.data.url },
+      React.createElement("img", { className: "site-favicon", src: this.props.data.faviconURL }),
+      React.createElement(
+        "span",
+        { className: "site-title" },
+        this.props.data.title
+      )
     );
   }
 });
@@ -5746,19 +5751,24 @@ module.exports = React.createClass({
 var React = require('../React');
 var Site = require('./Site');
 var sitesService = require('../sitesService');
+var eachSlice = require('../eachSlice');
 
 module.exports = React.createClass({
   displayName: 'exports',
 
   getInitialState: function getInitialState() {
     return {
-      topSites: []
+      rows: []
     };
   },
   componentDidMount: function componentDidMount() {
+
     sitesService.getSites().then((function (sites) {
+      var ROW_ITEM_COUNT = 4;
+      var rows = eachSlice(sites, ROW_ITEM_COUNT);
+
       this.setState({
-        topSites: sites
+        rows: rows
       });
     }).bind(this));
   },
@@ -5766,24 +5776,51 @@ module.exports = React.createClass({
     return React.createElement(
       'div',
       null,
-      this.state.topSites.map(function (site) {
-        return React.createElement(Site, { title: site.title });
+      this.state.rows.map(function (row) {
+        return React.createElement(
+          'div',
+          { className: 'sites-row' },
+          row.map(function (site) {
+            return React.createElement(Site, { data: site });
+          })
+        );
       })
     );
   }
 });
 
-},{"../React":1,"../sitesService":5,"./Site":2}],4:[function(require,module,exports){
+},{"../React":1,"../eachSlice":4,"../sitesService":6,"./Site":2}],4:[function(require,module,exports){
+"use strict";
+
+module.exports = function (array, how_many_slices) {
+  if (array.length <= how_many_slices) {
+    return array;
+  }
+
+  var slices_length = array.length / how_many_slices + 1;
+  var slices = [];
+
+  for (var i = 0; i < array.length; i += how_many_slices) {
+    slices.push(array.slice(i, i + how_many_slices));
+  }
+
+  return slices;
+};
+
+},{}],5:[function(require,module,exports){
 'use strict';
 
 var sitesService = require('./sitesService');
 var React = require('./React');
 var TopSites = require('./components/TopSites');
+var eachSlice = require('./eachSlice');
 
 React.render(React.createElement(TopSites, null), document.getElementById('content'));
 
-},{"./React":1,"./components/TopSites":3,"./sitesService":5}],5:[function(require,module,exports){
-"use strict";
+console.log(eachSlice(['a', 'b', 'c', 'd', 'e', 'f', 'g'], 2));
+
+},{"./React":1,"./components/TopSites":3,"./eachSlice":4,"./sitesService":6}],6:[function(require,module,exports){
+'use strict';
 
 module.exports = {
   getSites: function getSites() {
@@ -5792,7 +5829,8 @@ module.exports = {
         var sites = response.sites;
 
         sites.map(function (site) {
-          site.faviconURL = site.url.split('/')[2];
+          var faviconDomain = site.url.split('/')[2];
+          site.faviconURL = 'http://www.google.com/s2/favicons?domain=' + faviconDomain;
         });
 
         resolve(sites);
@@ -5801,4 +5839,4 @@ module.exports = {
   }
 };
 
-},{}]},{},[4]);
+},{}]},{},[5]);
