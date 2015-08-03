@@ -5725,6 +5725,42 @@ throw new Error(message);}catch(x) {}}};}module.exports = warning;},{"114":114}]
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
+'use strict';
+
+var React = require('../React');
+var sitesService = require('../sitesService');
+var SitesContainer = require('../components/SitesContainer');
+
+module.exports = React.createClass({
+  displayName: 'exports',
+
+  getInitialState: function getInitialState() {
+    return {
+      topSites: []
+    };
+  },
+  componentDidMount: function componentDidMount() {
+    sitesService.getSites().then((function (sites) {
+      this.setState({
+        topSites: sites
+      });
+    }).bind(this));
+  },
+  render: function render() {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h2',
+        null,
+        'Top sites'
+      ),
+      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 8 })
+    );
+  }
+});
+
+},{"../React":1,"../components/SitesContainer":4,"../sitesService":7}],3:[function(require,module,exports){
 "use strict";
 
 var React = require('../React');
@@ -5745,38 +5781,26 @@ module.exports = React.createClass({
   }
 });
 
-},{"../React":1}],3:[function(require,module,exports){
+},{"../React":1}],4:[function(require,module,exports){
 'use strict';
 
 var React = require('../React');
 var Site = require('./Site');
-var sitesService = require('../sitesService');
 var eachSlice = require('../eachSlice');
 
 module.exports = React.createClass({
   displayName: 'exports',
 
-  getInitialState: function getInitialState() {
-    return {
-      rows: []
-    };
-  },
-  componentDidMount: function componentDidMount() {
-
-    sitesService.getSites().then((function (sites) {
-      var ROW_ITEM_COUNT = 4;
-      var rows = eachSlice(sites, ROW_ITEM_COUNT);
-
-      this.setState({
-        rows: rows
-      });
-    }).bind(this));
-  },
   render: function render() {
+    var ROW_ITEM_COUNT = 4;
+    var sites = this.props.sites || [];
+    sites = sites.slice(0, this.props.limit);
+    var rows = eachSlice(sites, ROW_ITEM_COUNT);
+
     return React.createElement(
       'div',
       null,
-      this.state.rows.map(function (row) {
+      rows.map(function (row) {
         return React.createElement(
           'div',
           { className: 'sites-row' },
@@ -5789,12 +5813,12 @@ module.exports = React.createClass({
   }
 });
 
-},{"../React":1,"../eachSlice":4,"../sitesService":6,"./Site":2}],4:[function(require,module,exports){
+},{"../React":1,"../eachSlice":5,"./Site":3}],5:[function(require,module,exports){
 "use strict";
 
 module.exports = function (array, how_many_slices) {
   if (array.length <= how_many_slices) {
-    return array;
+    return [array];
   }
 
   var slices_length = array.length / how_many_slices + 1;
@@ -5807,19 +5831,15 @@ module.exports = function (array, how_many_slices) {
   return slices;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
-var sitesService = require('./sitesService');
 var React = require('./React');
-var TopSites = require('./components/TopSites');
-var eachSlice = require('./eachSlice');
+var Ntp = require('./components/Ntp');
 
-React.render(React.createElement(TopSites, null), document.getElementById('content'));
+React.render(React.createElement(Ntp, null), document.getElementById('content'));
 
-console.log(eachSlice(['a', 'b', 'c', 'd', 'e', 'f', 'g'], 2));
-
-},{"./React":1,"./components/TopSites":3,"./eachSlice":4,"./sitesService":6}],6:[function(require,module,exports){
+},{"./React":1,"./components/Ntp":2}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -5839,4 +5859,4 @@ module.exports = {
   }
 };
 
-},{}]},{},[5]);
+},{}]},{},[6]);

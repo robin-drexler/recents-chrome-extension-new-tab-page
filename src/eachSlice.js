@@ -1,6 +1,6 @@
 module.exports = function(array, how_many_slices) {
   if (array.length <= how_many_slices) {
-    return array;
+    return [array];
   }
 
   var slices_length = array.length / how_many_slices + 1;
