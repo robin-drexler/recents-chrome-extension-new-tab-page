@@ -24,9 +24,7 @@ module.exports = {
 
 function addFaviconUrl(sites) {
   return sites.map(function (site) {
-    var faviconDomain = site.url.split('/')[2];
-    site.faviconURL = 'http://www.google.com/s2/favicons?domain=' + faviconDomain;
-
+    site.faviconURL = 'chrome://favicon/' + site.url;
     return site;
   });
 }
