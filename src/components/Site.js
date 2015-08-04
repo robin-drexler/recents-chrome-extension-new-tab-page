@@ -5,7 +5,7 @@ module.exports = React.createClass({
 
     return (
       <a className="site site-link" href={this.props.data.url} title={this.props.data.title}>
-        <img className="site-favicon" src={this.props.data.faviconURL}/>
+        <img className="site-favicon" src={this.props.data.faviconURL} />
         <span className="site-title">{title}</span>
       </a>
     );

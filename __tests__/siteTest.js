@@ -15,4 +15,16 @@ describe('Site', function() {
 
     expect(anchor.getDOMNode().title).toEqual('important title');
   });
+
+  it('contains an non breaking space, when no title is set, so item occupies full height when there is no content', function() {
+
+    var data = {
+      title: ''
+    };
+    var site = TestUtils.renderIntoDocument(<Site data={data} />);
+    var container = TestUtils.findRenderedDOMComponentWithClass(site, 'site');
+
+    var titleElement = container.getDOMNode().querySelector('.site-title');
+    expect(titleElement.textContent).toEqual('\u00a0');
+  });
 });
