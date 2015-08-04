@@ -5749,7 +5749,7 @@ module.exports = React.createClass({
     var topSitesPromise = sitesService.getTopSites();
 
     Promise.all([recentPromise, topSitesPromise]).then((function (sites) {
-      this.setState({ topSites: sites[0], recents: sites[1] });
+      this.setState({ topSites: sites[1], recents: sites[0] });
     }).bind(this));
   },
   render: function render() {
