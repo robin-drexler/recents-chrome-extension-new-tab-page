@@ -5753,15 +5753,33 @@ module.exports = React.createClass({
     }).bind(this));
   },
   render: function render() {
+    var _this = this;
+
+    var recents = this.state.recents || [];
+
     return React.createElement(
       'div',
       null,
-      React.createElement(
-        'h2',
-        null,
-        'Recents'
-      ),
-      React.createElement(SitesContainer, { sites: this.state.recents, limit: 8 }),
+      (function () {
+        if (recents.length > 0) {
+          return React.createElement(
+            'div',
+            null,
+            React.createElement(
+              'h2',
+              null,
+              'Recents'
+            ),
+            React.createElement(SitesContainer, { sites: _this.state.recents, limit: 8 })
+          );
+        } else {
+          return React.createElement(
+            'h2',
+            null,
+            'OMG you totally need to install the Recents extension!'
+          );
+        }
+      })(),
       React.createElement(
         'h2',
         null,
@@ -5872,7 +5890,7 @@ module.exports = {
     return new Promise(function (resolve) {
       chrome.extension.sendMessage({ purpose: "getRecents" }, function (response) {
         console.log('RESPONSE');
-        var sites = response.sites;
+        var sites = response.sites || [];
         sites = addFaviconUrl(sites);
         resolve(sites);
       });

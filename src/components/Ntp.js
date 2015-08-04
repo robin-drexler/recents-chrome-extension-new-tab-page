@@ -21,13 +21,31 @@ module.exports = React.createClass({
 
   },
   render: function() {
+    var recents = this.state.recents || [];
+
     return (
       <div>
-        <h2>Recents</h2>
-        <SitesContainer sites={this.state.recents} limit={8}/>
+        {
+          (() => {
+            if (recents.length > 0) {
+              return (
+                <div>
+
+                  <h2>Recents</h2>
+                  <SitesContainer sites={this.state.recents} limit={8}/>
+                </div>
+              )
+            } else {
+              return (
+                <h2>OMG you totally need to install the Recents extension!</h2>
+              )
+            }
+          })()
+        }
 
         <h2>Top sites</h2>
         <SitesContainer sites={this.state.topSites} limit={8}/>
+
       </div>
     );
   }

@@ -14,7 +14,7 @@ module.exports = {
     return new Promise(function (resolve) {
       chrome.extension.sendMessage({purpose: "getRecents"}, function (response) {
         console.log('RESPONSE');
-        var sites = response.sites;
+        var sites = response.sites || [];
         sites = addFaviconUrl(sites);
         resolve(sites);
       });

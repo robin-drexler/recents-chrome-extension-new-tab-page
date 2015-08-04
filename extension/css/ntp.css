@@ -44,6 +44,7 @@ body, html {
 
 .site-link:active {
     background: #f2f2f2;
+    transform: scale(0.99);
 }
 
 .site-favicon {
