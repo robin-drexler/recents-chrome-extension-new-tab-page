@@ -5761,15 +5761,15 @@ module.exports = React.createClass({
       React.createElement(
         'h2',
         null,
-        'Top sites'
+        'Recents'
       ),
-      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 8 }),
+      React.createElement(SitesContainer, { sites: this.state.recents, limit: 8 }),
       React.createElement(
         'h2',
         null,
-        'Recents'
+        'Top sites'
       ),
-      React.createElement(SitesContainer, { sites: this.state.recents, limit: 8 })
+      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 8 })
     );
   }
 });
@@ -5784,7 +5784,7 @@ module.exports = React.createClass({
   render: function render() {
     return React.createElement(
       "a",
-      { className: "site site-link", href: this.props.data.url },
+      { className: "site site-link", href: this.props.data.url, title: this.props.data.title },
       React.createElement("img", { className: "site-favicon", src: this.props.data.faviconURL }),
       React.createElement(
         "span",
