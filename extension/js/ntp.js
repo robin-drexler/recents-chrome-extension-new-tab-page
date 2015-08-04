@@ -5735,23 +5735,21 @@ module.exports = React.createClass({
   displayName: 'exports',
 
   getInitialState: function getInitialState() {
+    var placeHolderSites = new Array(8).join(' ').split(' ').map(function () {
+      return {};
+    });
     return {
-      topSites: [],
-      recents: []
+      topSites: placeHolderSites,
+      recents: placeHolderSites
     };
   },
   componentDidMount: function componentDidMount() {
-    sitesService.getRecents().then((function (sites) {
-      console.log(sites);
-      this.setState({
-        recents: sites
-      });
-    }).bind(this));
 
-    sitesService.getTopSites().then((function (sites) {
-      this.setState({
-        topSites: sites
-      });
+    var recentPromise = sitesService.getRecents();
+    var topSitesPromise = sitesService.getTopSites();
+
+    Promise.all([recentPromise, topSitesPromise]).then((function (sites) {
+      this.setState({ topSites: sites[0], recents: sites[1] });
     }).bind(this));
   },
   render: function render() {
@@ -5782,6 +5780,8 @@ module.exports = React.createClass({
   displayName: "exports",
 
   render: function render() {
+    var title = this.props.data.title || " ";
+
     return React.createElement(
       "a",
       { className: "site site-link", href: this.props.data.url, title: this.props.data.title },
@@ -5789,7 +5789,7 @@ module.exports = React.createClass({
       React.createElement(
         "span",
         { className: "site-title" },
-        this.props.data.title
+        title
       )
     );
   }
@@ -5882,9 +5882,7 @@ module.exports = {
 
 function addFaviconUrl(sites) {
   return sites.map(function (site) {
-    var faviconDomain = site.url.split('/')[2];
-    site.faviconURL = 'http://www.google.com/s2/favicons?domain=' + faviconDomain;
-
+    site.faviconURL = 'chrome://favicon/' + site.url;
     return site;
   });
 }

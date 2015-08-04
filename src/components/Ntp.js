@@ -4,24 +4,21 @@ var SitesContainer = require('../components/SitesContainer');
 
 module.exports = React.createClass({
   getInitialState: function () {
+    var placeHolderSites = new Array(8).join(' ').split(' ').map(() => { return {}});
     return {
-      topSites: [],
-      recents: [],
+      topSites: placeHolderSites,
+      recents: placeHolderSites
     }
   },
   componentDidMount: function () {
-    sitesService.getRecents().then(function (sites) {
-      console.log(sites);
-      this.setState({
-        recents: sites
-      })
-    }.bind(this));
 
-    sitesService.getTopSites().then(function (sites) {
-      this.setState({
-        topSites: sites
-      })
-    }.bind(this));
+    var recentPromise = sitesService.getRecents();
+    var topSitesPromise = sitesService.getTopSites();
+
+    Promise.all([recentPromise, topSitesPromise]).then(function (sites) {
+      this.setState({topSites: sites[0], recents: sites[1]});
+    }.bind(this))
+
   },
   render: function() {
     return (
