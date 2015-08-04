@@ -5736,11 +5736,19 @@ module.exports = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      topSites: []
+      topSites: [],
+      recents: []
     };
   },
   componentDidMount: function componentDidMount() {
-    sitesService.getSites().then((function (sites) {
+    sitesService.getRecents().then((function (sites) {
+      console.log(sites);
+      this.setState({
+        recents: sites
+      });
+    }).bind(this));
+
+    sitesService.getTopSites().then((function (sites) {
       this.setState({
         topSites: sites
       });
@@ -5755,7 +5763,13 @@ module.exports = React.createClass({
         null,
         'Top sites'
       ),
-      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 8 })
+      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 8 }),
+      React.createElement(
+        'h2',
+        null,
+        'Recents'
+      ),
+      React.createElement(SitesContainer, { sites: this.state.recents, limit: 8 })
     );
   }
 });
@@ -5840,23 +5854,39 @@ var Ntp = require('./components/Ntp');
 React.render(React.createElement(Ntp, null), document.getElementById('content'));
 
 },{"./React":1,"./components/Ntp":2}],7:[function(require,module,exports){
-'use strict';
+"use strict";
 
 module.exports = {
-  getSites: function getSites() {
+  getTopSites: function getTopSites() {
     return new Promise(function (resolve) {
       chrome.extension.sendMessage({ purpose: "getTopSites" }, function (response) {
         var sites = response.sites;
+        sites = addFaviconUrl(sites);
 
-        sites.map(function (site) {
-          var faviconDomain = site.url.split('/')[2];
-          site.faviconURL = 'http://www.google.com/s2/favicons?domain=' + faviconDomain;
-        });
-
+        resolve(sites);
+      });
+    });
+  },
+  getRecents: function getRecents() {
+    console.log('GET SITES');
+    return new Promise(function (resolve) {
+      chrome.extension.sendMessage({ purpose: "getRecents" }, function (response) {
+        console.log('RESPONSE');
+        var sites = response.sites;
+        sites = addFaviconUrl(sites);
         resolve(sites);
       });
     });
   }
 };
+
+function addFaviconUrl(sites) {
+  return sites.map(function (site) {
+    var faviconDomain = site.url.split('/')[2];
+    site.faviconURL = 'http://www.google.com/s2/favicons?domain=' + faviconDomain;
+
+    return site;
+  });
+}
 
 },{}]},{},[6]);
