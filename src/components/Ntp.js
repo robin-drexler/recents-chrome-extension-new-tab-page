@@ -1,4 +1,4 @@
-var React = require('../React');
+var React = require('../react');
 var sitesService = require('../sitesService');
 var SitesContainer = require('../components/SitesContainer');
 
@@ -32,7 +32,7 @@ module.exports = React.createClass({
                 <div>
 
                   <h2>Recents</h2>
-                  <SitesContainer sites={this.state.recents} limit={8}/>
+                  <SitesContainer sites={this.state.recents} limit={9}/>
                 </div>
               )
             } else {
@@ -44,7 +44,7 @@ module.exports = React.createClass({
         }
 
         <h2>Top sites</h2>
-        <SitesContainer sites={this.state.topSites} limit={8}/>
+        <SitesContainer sites={this.state.topSites} limit={9}/>
 
       </div>
     );
