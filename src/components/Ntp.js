@@ -1,4 +1,4 @@
-var React = require('../react');
+var React = require('react');
 var sitesService = require('../sitesService');
 var SitesContainer = require('../components/SitesContainer');
 

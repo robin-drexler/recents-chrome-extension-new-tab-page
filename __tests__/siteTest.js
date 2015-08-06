@@ -1,9 +1,7 @@
 describe('Site', function() {
-
   jest.dontMock('../src/components/Site');
-  jest.dontMock('../src/react');
 
-  var React = require('../src/react');
+  var React = require('react/addons');
   var TestUtils = React.addons.TestUtils;
   var Site = require('../src/components/Site');
 
