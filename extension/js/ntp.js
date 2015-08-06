@@ -19752,6 +19752,12 @@ module.exports = React.createClass({
     return React.createElement(
       'div',
       null,
+      React.createElement(
+        'h2',
+        null,
+        'Top sites'
+      ),
+      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 9 }),
       (function () {
         if (recents.length > 0) {
           return React.createElement(
@@ -19771,13 +19777,7 @@ module.exports = React.createClass({
             'OMG you totally need to install the Recents extension!'
           );
         }
-      })(),
-      React.createElement(
-        'h2',
-        null,
-        'Top sites'
-      ),
-      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 9 })
+      })()
     );
   }
 });

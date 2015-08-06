@@ -25,6 +25,8 @@ module.exports = React.createClass({
 
     return (
       <div>
+        <h2>Top sites</h2>
+        <SitesContainer sites={this.state.topSites} limit={9}/>
         {
           (() => {
             if (recents.length > 0) {
@@ -42,10 +44,6 @@ module.exports = React.createClass({
             }
           })()
         }
-
-        <h2>Top sites</h2>
-        <SitesContainer sites={this.state.topSites} limit={9}/>
-
       </div>
     );
   }
