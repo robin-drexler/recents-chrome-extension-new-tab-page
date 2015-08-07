@@ -39,4 +39,20 @@ describe('Site', function() {
     var titleElement = container.getDOMNode().querySelector('.site-title');
     expect(titleElement.textContent).toEqual('\u00a0');
   });
+
+  it('indicates removal when x is hovered', function() {
+    var data = {
+      title: ''
+    };
+    var site = TestUtils.renderIntoDocument(<Recent data={data} />);
+    var siteContainer = TestUtils.findRenderedDOMComponentWithClass(site, 'site');
+    var removeComponent = TestUtils.findRenderedDOMComponentWithClass(site, 'site-remove');
+
+    TestUtils.Simulate.mouseOver(removeComponent);
+    expect(siteContainer.getDOMNode().className).toContain('site-removal-intended');
+
+    TestUtils.Simulate.mouseOut(removeComponent);
+    expect(siteContainer.getDOMNode().className).not.toContain('site-removal-intended');
+  });
+
 });
