@@ -34,11 +34,16 @@ body, html {
     border-radius: 2px;
     margin: 10px 10px 10px 0;
     padding: 1em;
+    position: relative;
+    transition: all .1s ease-out;
+}
+
+.site.site-removal-intended {
+    opacity: .3;
 }
 
 .site-link {
     color: rgba(0, 0, 0, .54);
-    transition: all .1s ease-out;
 }
 
 .site-link:hover {
@@ -63,7 +68,15 @@ body, html {
     white-space: nowrap;
     overflow: hidden;
 }
-
+.site-remove {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    font-size: 18px;
+}
+.site-remove:after {
+    content: '\00D7'
+}
 
 @keyframes fadein {
     from {

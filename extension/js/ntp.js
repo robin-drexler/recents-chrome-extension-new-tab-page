@@ -21199,38 +21199,67 @@ module.exports = React.createClass({
       "div",
       { className: "sites-row" },
       sites.map((function (site) {
-        return React.createElement(this.props.site, { data: site });
+        return(
+          // XXX `site` may be ambiguous
+          React.createElement(this.props.site, { data: site })
+        );
       }).bind(this))
     );
   }
 });
 
 },{"react":155}],177:[function(require,module,exports){
-"use strict";
+'use strict';
 
 var React = require('react');
+var SiteActions = require('../siteActions');
 
 module.exports = React.createClass({
-  displayName: "exports",
+  displayName: 'exports',
 
+  indicateRemovalIntend: function indicateRemovalIntend() {
+    this.setState({
+      isRemovalIntended: true
+    });
+  },
+  removeRemovalIntend: function removeRemovalIntend() {
+    this.setState({
+      isRemovalIntended: false
+    });
+  },
+  removeRecent: function removeRecent(e) {
+    SiteActions.removeRecent(this.props.data.id);
+    e.preventDefault();
+  },
+  getInitialState: function getInitialState() {
+    return {
+      isRemovalIntended: false
+    };
+  },
   render: function render() {
-    var title = this.props.data.title || " ";
-    var faviconUrl = "chrome://favicon/" + this.props.data.url;
+    var title = this.props.data.title || ' ';
+    var faviconUrl = 'chrome://favicon/' + this.props.data.url;
+    var isRemovalIntendedClassString = '';
+
+    if (this.state.isRemovalIntended) {
+      isRemovalIntendedClassString = 'site-removal-intended';
+    }
 
     return React.createElement(
-      "a",
-      { className: "site site-link", href: this.props.data.url, title: this.props.data.title },
-      React.createElement("img", { className: "site-favicon", src: faviconUrl }),
+      'a',
+      { className: "site site-link " + isRemovalIntendedClassString, href: this.props.data.url, title: this.props.data.title },
+      React.createElement('div', { title: 'remove site', className: 'site-remove', onClick: this.removeRecent, onMouseOver: this.indicateRemovalIntend, onMouseOut: this.removeRemovalIntend }),
+      React.createElement('img', { className: 'site-favicon', src: faviconUrl }),
       React.createElement(
-        "span",
-        { className: "site-title" },
+        'span',
+        { className: 'site-title' },
         title
       )
     );
   }
 });
 
-},{"react":155}],178:[function(require,module,exports){
+},{"../siteActions":180,"react":155}],178:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -21268,7 +21297,7 @@ React.render(React.createElement(Ntp, null), document.getElementById('content'))
 
 var Reflux = require('reflux');
 
-module.exports = Reflux.createActions(['loadRecents', 'loadTopSites']);
+module.exports = Reflux.createActions(['loadRecents', 'loadTopSites', 'removeRecent']);
 
 },{"reflux":156}],181:[function(require,module,exports){
 'use strict';
@@ -21279,12 +21308,18 @@ var SiteActions = require('../siteActions');
 var RecentsStore = Reflux.createStore({
   init: function init() {
     this.listenTo(SiteActions.loadRecents, 'onLoadRecents');
+    this.listenTo(SiteActions.removeRecent, 'onRemoveRecent');
   },
   onLoadRecents: function onLoadRecents() {
     chrome.extension.sendMessage({ purpose: "getRecents" }, (function (response) {
       console.log('RESPONSE');
       var sites = response.sites || [];
       this.trigger(sites);
+    }).bind(this));
+  },
+  onRemoveRecent: function onRemoveRecent(recentId) {
+    chrome.extension.sendMessage({ purpose: "removeRecent", id: recentId }, (function (response) {
+      this.onLoadRecents();
     }).bind(this));
   }
 });

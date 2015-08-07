@@ -9,6 +9,7 @@ module.exports = React.createClass({
       <div className="sites-row">
         {sites.map(function (site) {
           return (
+            // XXX `site` may be ambiguous
             <this.props.site data={site} />
           );
         }.bind(this))}

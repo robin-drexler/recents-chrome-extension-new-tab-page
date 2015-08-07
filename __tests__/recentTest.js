@@ -1,9 +1,9 @@
 describe('Site', function() {
-  jest.dontMock('../src/components/Site');
+  jest.dontMock('../src/components/recent');
 
   var React = require('react/addons');
   var TestUtils = React.addons.TestUtils;
-  var Site = require('../src/components/Site');
+  var Recent = require('../src/components/recent');
 
 
   it('contains the sites title, so it is fully revealed on hover', function() {
@@ -11,7 +11,7 @@ describe('Site', function() {
       title: 'important title'
     };
 
-    var site = TestUtils.renderIntoDocument(<Site data={data} />);
+    var site = TestUtils.renderIntoDocument(<Recent data={data} />);
     var anchor = TestUtils.findRenderedDOMComponentWithClass(site, 'site-link');
 
     expect(anchor.getDOMNode().title).toEqual('important title');
@@ -22,7 +22,7 @@ describe('Site', function() {
     var data = {
       url: 'http://jimdo.com/'
     };
-    var site = TestUtils.renderIntoDocument(<Site data={data} />);
+    var site = TestUtils.renderIntoDocument(<Recent data={data} />);
     var anchor = TestUtils.findRenderedDOMComponentWithClass(site, 'site-link');
 
     expect(anchor.getDOMNode().href).toEqual('http://jimdo.com/');
@@ -33,7 +33,7 @@ describe('Site', function() {
     var data = {
       title: ''
     };
-    var site = TestUtils.renderIntoDocument(<Site data={data} />);
+    var site = TestUtils.renderIntoDocument(<Recent data={data} />);
     var container = TestUtils.findRenderedDOMComponentWithClass(site, 'site');
 
     var titleElement = container.getDOMNode().querySelector('.site-title');

@@ -8,12 +8,24 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
   }
   
   if (request.purpose === "getRecents") {
-    console.log('BEFORE');
+    console.log('GET ALL');
     chrome.runtime.sendMessage(RECENTS_EXTENSION_ID, {
       action: 'getAll',
     }, function (response) {
       console.log('got response from recents', response);
-      sendResponse({sites: response});
+      sendResponse({sites: response.items});
+    });
+
+  }
+
+  if (request.purpose === "removeRecent") {
+    console.log('DELETE');
+    chrome.runtime.sendMessage(RECENTS_EXTENSION_ID, {
+      action: 'remove',
+      id: request.id
+    }, function (response) {
+      console.log('got response from recents for deletion', response);
+      sendResponse(response);
     });
 
   }
