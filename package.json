@@ -26,9 +26,12 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "unmockedModulePathPatterns": ["react"]
+    "unmockedModulePathPatterns": [
+      "react"
+    ]
   },
   "dependencies": {
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "reflux": "^0.2.11"
   }
 }
