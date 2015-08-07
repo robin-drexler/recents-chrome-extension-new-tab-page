@@ -1,5 +1,4 @@
 var React = require('react');
-var Site = require('./Site');
 
 module.exports = React.createClass({
   render: function () {
@@ -10,9 +9,9 @@ module.exports = React.createClass({
       <div className="sites-row">
         {sites.map(function (site) {
           return (
-            <Site data={site} />
+            <this.props.site data={site} />
           );
-        })}
+        }.bind(this))}
       </div>
     );
   }

@@ -6,6 +6,9 @@ var RecentsStore = require('../stores/recentsStore');
 var TopSiteStore = require('../stores/topSitesStore');
 var SitesActions = require('../siteActions');
 
+var TopSite = require('../components/topSite');
+var Recent = require('../components/recent');
+
 module.exports = React.createClass({
   mixins: [
     Reflux.connect(RecentsStore, 'recents'),
@@ -28,15 +31,14 @@ module.exports = React.createClass({
     return (
       <div>
         <h2>Top sites</h2>
-        <SitesContainer sites={this.state.topSites} limit={9}/>
+        <SitesContainer sites={this.state.topSites} limit={9} site={TopSite} />
         {
           (() => {
             if (recents.length > 0) {
               return (
                 <div>
-
                   <h2>Recents</h2>
-                  <SitesContainer sites={this.state.recents} limit={9}/>
+                  <SitesContainer sites={this.state.recents} limit={9} site={Recent} />
                 </div>
               )
             } else {
