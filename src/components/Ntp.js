@@ -1,13 +1,16 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var sitesService = require('../sitesService');
 var SitesContainer = require('../components/SitesContainer');
 var RecentsStore = require('../stores/recentsStore');
+var TopSiteStore = require('../stores/topSitesStore');
 var SitesActions = require('../siteActions');
 
 module.exports = React.createClass({
-  mixins: [Reflux.connect(RecentsStore, 'recents')],
+  mixins: [
+    Reflux.connect(RecentsStore, 'recents'),
+    Reflux.connect(TopSiteStore, 'topSites')
+  ],
   getInitialState: function () {
     var placeHolderSites = new Array(9).join(' ').split(' ').map(() => { return {}});
     return {
@@ -16,12 +19,8 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function () {
-    sitesService.getTopSites().then(function (sites) {
-      this.setState({topSites: sites});
-    }.bind(this));
-
     SitesActions.loadRecents();
-
+    SitesActions.loadTopSites();
   },
   render: function() {
     var recents = this.state.recents || [];

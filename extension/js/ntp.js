@@ -21120,15 +21120,15 @@ exports.throwIf = function(val,msg){
 var React = require('react');
 var Reflux = require('reflux');
 
-var sitesService = require('../sitesService');
 var SitesContainer = require('../components/SitesContainer');
 var RecentsStore = require('../stores/recentsStore');
+var TopSiteStore = require('../stores/topSitesStore');
 var SitesActions = require('../siteActions');
 
 module.exports = React.createClass({
   displayName: 'exports',
 
-  mixins: [Reflux.connect(RecentsStore, 'recents')],
+  mixins: [Reflux.connect(RecentsStore, 'recents'), Reflux.connect(TopSiteStore, 'topSites')],
   getInitialState: function getInitialState() {
     var placeHolderSites = new Array(9).join(' ').split(' ').map(function () {
       return {};
@@ -21139,11 +21139,8 @@ module.exports = React.createClass({
     };
   },
   componentDidMount: function componentDidMount() {
-    sitesService.getTopSites().then((function (sites) {
-      this.setState({ topSites: sites });
-    }).bind(this));
-
     SitesActions.loadRecents();
+    SitesActions.loadTopSites();
   },
   render: function render() {
     var _this = this;
@@ -21183,7 +21180,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"../components/SitesContainer":177,"../siteActions":179,"../sitesService":180,"../stores/recentsStore":181,"react":155,"reflux":156}],176:[function(require,module,exports){
+},{"../components/SitesContainer":177,"../siteActions":179,"../stores/recentsStore":180,"../stores/topSitesStore":181,"react":155,"reflux":156}],176:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -21193,11 +21190,12 @@ module.exports = React.createClass({
 
   render: function render() {
     var title = this.props.data.title || " ";
+    var faviconUrl = "chrome://favicon/" + this.props.data.url;
 
     return React.createElement(
       "a",
       { className: "site site-link", href: this.props.data.url, title: this.props.data.title },
-      React.createElement("img", { className: "site-favicon", src: this.props.data.faviconURL }),
+      React.createElement("img", { className: "site-favicon", src: faviconUrl }),
       React.createElement(
         "span",
         { className: "site-title" },
@@ -21243,43 +21241,9 @@ React.render(React.createElement(Ntp, null), document.getElementById('content'))
 
 var Reflux = require('reflux');
 
-module.exports = Reflux.createActions(['loadRecents']);
+module.exports = Reflux.createActions(['loadRecents', 'loadTopSites']);
 
 },{"reflux":156}],180:[function(require,module,exports){
-"use strict";
-
-module.exports = {
-  getTopSites: function getTopSites() {
-    return new Promise(function (resolve) {
-      chrome.extension.sendMessage({ purpose: "getTopSites" }, function (response) {
-        var sites = response.sites;
-        sites = addFaviconUrl(sites);
-
-        resolve(sites);
-      });
-    });
-  },
-  getRecents: function getRecents() {
-    console.log('GET SITES');
-    return new Promise(function (resolve) {
-      chrome.extension.sendMessage({ purpose: "getRecents" }, function (response) {
-        console.log('RESPONSE');
-        var sites = response.sites || [];
-        sites = addFaviconUrl(sites);
-        resolve(sites);
-      });
-    });
-  }
-};
-
-function addFaviconUrl(sites) {
-  return sites.map(function (site) {
-    site.faviconURL = 'chrome://favicon/' + site.url;
-    return site;
-  });
-}
-
-},{}],181:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');
@@ -21293,7 +21257,6 @@ var RecentsStore = Reflux.createStore({
     chrome.extension.sendMessage({ purpose: "getRecents" }, (function (response) {
       console.log('RESPONSE');
       var sites = response.sites || [];
-      sites = addFaviconUrl(sites);
       this.trigger(sites);
     }).bind(this));
   }
@@ -21301,12 +21264,23 @@ var RecentsStore = Reflux.createStore({
 
 module.exports = RecentsStore;
 
-function addFaviconUrl(sites) {
-  return sites.map(function (site) {
-    site.faviconURL = 'chrome://favicon/' + site.url;
-    return site;
-  });
-}
+},{"../siteActions":179,"reflux":156}],181:[function(require,module,exports){
+'use strict';
+
+var Reflux = require('reflux');
+var SiteActions = require('../siteActions');
+
+module.exports = Reflux.createStore({
+  init: function init() {
+    this.listenTo(SiteActions.loadTopSites, 'onLoadTopSites');
+  },
+  onLoadTopSites: function onLoadTopSites() {
+    chrome.extension.sendMessage({ purpose: "getTopSites" }, (function (response) {
+      var sites = response.sites;
+      this.trigger(sites);
+    }).bind(this));
+  }
+});
 
 },{"../siteActions":179,"reflux":156}],182:[function(require,module,exports){
 // shim for using process in browser
