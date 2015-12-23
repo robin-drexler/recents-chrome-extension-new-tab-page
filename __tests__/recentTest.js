@@ -1,3 +1,5 @@
+import React from 'react';
+
 describe('Site', function() {
   jest.dontMock('../src/components/recent');
 
@@ -41,6 +43,21 @@ describe('Site', function() {
   });
 
   it('indicates removal when x is hovered', function() {
+    var data = {
+      title: ''
+    };
+    var site = TestUtils.renderIntoDocument(<Recent data={data} />);
+    var siteContainer = TestUtils.findRenderedDOMComponentWithClass(site, 'site');
+    var removeComponent = TestUtils.findRenderedDOMComponentWithClass(site, 'site-remove');
+
+    TestUtils.Simulate.mouseOver(removeComponent);
+    expect(siteContainer.getDOMNode().className).toContain('site-removal-intended');
+
+    TestUtils.Simulate.mouseOut(removeComponent);
+    expect(siteContainer.getDOMNode().className).not.toContain('site-removal-intended');
+  });
+
+  it('removes recent when x is clicked', function() {
     var data = {
       title: ''
     };

@@ -6,7 +6,7 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
       sendResponse({sites: sites});
     });
   }
-  
+
   if (request.purpose === "getRecents") {
     console.log('GET ALL');
     chrome.runtime.sendMessage(RECENTS_EXTENSION_ID, {

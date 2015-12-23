@@ -1,9 +1,9 @@
-describe('Sites Container', function() {
+import React from 'react';
 
+describe('Sites Container', function() {
   jest.dontMock('../src/components/SitesContainer');
 
-  var React = require('react/addons');
-  var TestUtils = React.addons.TestUtils;
+  var TestUtils = require('react-addons-test-utils');
   var SitesContainer = require('../src/components/SitesContainer');
   var Site = require('../src/components/recent');
 

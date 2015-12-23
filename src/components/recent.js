@@ -1,4 +1,5 @@
-var React = require('react');
+import React from 'react';
+
 var SiteActions = require('../siteActions');
 
 module.exports = React.createClass({
