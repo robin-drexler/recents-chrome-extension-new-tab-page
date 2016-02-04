@@ -20263,16 +20263,20 @@ module.exports = React.createClass({
   mixins: [Reflux.connect(RecentsStore, 'recents'), Reflux.connect(TopSiteStore, 'topSites')],
   getInitialState: function getInitialState() {
     var placeHolderSites = new Array(9).join(' ').split(' ').map(() => {
-      return {};
+      return { title: '', url: '' };
     });
     return {
       topSites: placeHolderSites,
-      recents: placeHolderSites
+      recents: placeHolderSites,
+      filter: ''
     };
   },
   componentDidMount: function componentDidMount() {
     SitesActions.loadRecents();
     SitesActions.loadTopSites();
+  },
+  onFilter: function onFilter(e) {
+    this.setState({ filter: e.target.value });
   },
   render: function render() {
     var recents = this.state.recents || [];
@@ -20280,12 +20284,13 @@ module.exports = React.createClass({
     return React.createElement(
       'div',
       null,
+      React.createElement('input', { onChange: this.onFilter, value: this.state.filter }),
       React.createElement(
         'h2',
         null,
         'Top sites'
       ),
-      React.createElement(SitesContainer, { sites: this.state.topSites, limit: 9, site: TopSite }),
+      React.createElement(SitesContainer, { filter: this.state.filter, sites: this.state.topSites, limit: 9, site: TopSite }),
       (() => {
         if (recents.length > 0) {
           return React.createElement(
@@ -20296,7 +20301,7 @@ module.exports = React.createClass({
               null,
               'Recents'
             ),
-            React.createElement(SitesContainer, { sites: this.state.recents, limit: 9, site: Recent })
+            React.createElement(SitesContainer, { filter: this.state.filter, sites: this.state.recents, limit: 9, site: Recent })
           );
         } else {
           return React.createElement(
@@ -20311,24 +20316,33 @@ module.exports = React.createClass({
 });
 
 },{"../components/SitesContainer":177,"../components/recent":178,"../components/topSite":179,"../siteActions":181,"../stores/recentsStore":182,"../stores/topSitesStore":183,"react":157,"reflux":173}],177:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = _react2.default.createClass({
-  displayName: "exports",
+  displayName: 'exports',
 
   render: function render() {
     var sites = this.props.sites || [];
+    var filter = this.props.filter || '';
+    filter = filter.toLowerCase();
+
+    if (filter) {
+      sites = sites.filter(function (site) {
+        return site.title.toLowerCase().includes(filter) || site.url.includes(filter);
+      });
+    }
+
     sites = sites.slice(0, this.props.limit);
 
     return _react2.default.createElement(
-      "div",
-      { className: "sites-row" },
+      'div',
+      { className: 'sites-row' },
       sites.map((function (site) {
         return(
           // XXX `site` may be ambiguous

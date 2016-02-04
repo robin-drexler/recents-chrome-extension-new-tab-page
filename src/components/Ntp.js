@@ -15,30 +15,35 @@ module.exports = React.createClass({
     Reflux.connect(TopSiteStore, 'topSites')
   ],
   getInitialState: function () {
-    var placeHolderSites = new Array(9).join(' ').split(' ').map(() => { return {}});
+    var placeHolderSites = new Array(9).join(' ').split(' ').map(() => { return {title: '', url: ''}});
     return {
       topSites: placeHolderSites,
-      recents: placeHolderSites
+      recents: placeHolderSites,
+      filter: ''
     }
   },
   componentDidMount: function () {
     SitesActions.loadRecents();
     SitesActions.loadTopSites();
   },
+  onFilter: function(e) {
+    this.setState({filter: e.target.value});
+  },
   render: function() {
     var recents = this.state.recents || [];
 
     return (
       <div>
+        <input onChange={this.onFilter} value={this.state.filter} />
         <h2>Top sites</h2>
-        <SitesContainer sites={this.state.topSites} limit={9} site={TopSite} />
+        <SitesContainer filter={this.state.filter} sites={this.state.topSites} limit={9} site={TopSite} />
         {
           (() => {
             if (recents.length > 0) {
               return (
                 <div>
                   <h2>Recents</h2>
-                  <SitesContainer sites={this.state.recents} limit={9} site={Recent} />
+                  <SitesContainer filter={this.state.filter} sites={this.state.recents} limit={9} site={Recent} />
                 </div>
               )
             } else {
