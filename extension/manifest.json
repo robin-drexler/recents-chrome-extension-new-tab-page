@@ -7,17 +7,12 @@
     "128": "/img/icons/icon_128.png"
   },
   "description": "Yay, I'm so useless.",
-  "permissions": [
-    "topSites",
-    "chrome://favicon/"
-  ],
+  "permissions": ["topSites", "chrome://favicon/"],
   "chrome_url_overrides": {
-    "newtab": "/html/ntp.html"
+    "newtab": "/ntp/ntp.html"
   },
   "background": {
-    "scripts": [
-      "js/background.js"
-    ]
+    "scripts": ["js/background.js"]
   },
   "manifest_version": 2
 }

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "watch": "parcel watch --out-dir extension/ntp src/ntp.html --public-url /ntp/",
     "test": "jest __tests__/suite.js"
   },
   "repository": {
@@ -17,10 +18,11 @@
   },
   "homepage": "https://github.com/robin-drexler/Simple-Chrome-Extension-Content-Script-Skeleton",
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-preset-es2015": "^6.3.13",
-    "babel-preset-es2015-node5": "^1.1.1",
-    "babel-preset-react": "^6.3.13",
+    "babel-preset-es2015-node5": "^1.2.0",
+    "babel-preset-react": "^6.24.1",
     "babelify": "^7.2.0",
     "gulp": "^3.9.0",
     "gulp-watch": "^4.3.5",
@@ -31,12 +33,6 @@
     "npm": "^3.5.2",
     "react-addons-test-utils": "^0.14.3",
     "socket.io": "^1.3.7"
-  },
-  "babel": {
-    "presets": [
-      "es2015-node5",
-      "react"
-    ]
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
@@ -50,10 +46,14 @@
       "es6",
       "js"
     ],
-    "moduleFileExtensions": ["js", "json", "es6"]
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ]
   },
   "dependencies": {
-    "react": "^0.14.3",
-    "reflux": "^0.3.0"
+    "react": "^0.14.9",
+    "reflux": "^0.3.1"
   }
 }
