@@ -1,8 +1,6 @@
-var React = require('react');
-var Ntp = require('./components/Ntp');
+import React from "react";
+import ReactDom from "react-dom";
+import Ntp from "./components/Ntp";
 
-
-React.render(
-  <Ntp />,
-  document.getElementById('content')
-);
+console.log(React);
+ReactDom.render(<Ntp />, document.getElementById("content"));

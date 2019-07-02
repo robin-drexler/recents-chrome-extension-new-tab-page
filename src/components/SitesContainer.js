@@ -1,29 +1,31 @@
-import React from 'react';
+import React from "react";
 
-module.exports = React.createClass({
-  render: function () {
-    var sites = this.props.sites || [];
-    var filter = this.props.filter || '';
-    filter = filter.toLowerCase();
+export default function SitesContainer(props) {
+  var sites = props.sites || [];
+  var filter = props.filter || "";
+  filter = filter.toLowerCase();
 
-    if (filter) {
-      sites = sites.filter(function (site) {
-        return site.title.toLowerCase().includes(filter)
-          || site.url.includes(filter);
-      });
-    }
+  if (filter) {
+    sites = sites.filter(function(site) {
+      return (
+        site.title.toLowerCase().includes(filter) || site.url.includes(filter)
+      );
+    });
+  }
 
-    sites = sites.slice(0, this.props.limit);
+  sites = sites.slice(0, props.limit);
 
-    return (
-      <div className="sites-row">
-        {sites.map(function (site) {
+  return (
+    <div className="sites-row">
+      {sites.map(
+        function(site, i) {
+          const Site = props.site;
           return (
             // XXX `site` may be ambiguous
-            <this.props.site data={site} />
+            <Site key={i} data={site} onRemove={props.onRemove} />
           );
-        }.bind(this))}
-      </div>
-    );
-  }
-});
+        }.bind(this)
+      )}
+    </div>
+  );
+}
