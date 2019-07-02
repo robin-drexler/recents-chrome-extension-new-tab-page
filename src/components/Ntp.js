@@ -37,9 +37,12 @@ export default function Ntp() {
   return (
     <div>
       <input
+        className="filter-input"
         onChange={event => {
           setFilter(event.target.value);
         }}
+        aria-label="Filter"
+        placeholder="Filter"
         value={filter}
       />
       <h2>Top sites</h2>
