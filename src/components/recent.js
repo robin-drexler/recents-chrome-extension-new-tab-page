@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function Recent(props) {
   const title = props.data.title || "\u00a0";
-  const faviconUrl = `chrome://favicon/${props.data.url}`;
+  const faviconUrl = `chrome://favicon/size/16@2x/${props.data.url}`;
   const [isRemovalIntended, setIsRemovalIntended] = useState(false);
   const isRemovalIntendedClassString = isRemovalIntended
     ? "site-removal-intended"

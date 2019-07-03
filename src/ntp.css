@@ -8,8 +8,7 @@ html {
   padding: 0;
   font-size: 13px;
   background-color: rgb(51, 54, 57);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: system-ui, BlinkMacSystemFont, "Roboto", arial, sans-serif;
   color: rgb(238, 238, 238);
 }
 
@@ -42,25 +41,20 @@ html {
   margin: 10px 10px 10px 0;
   padding: 1.3em;
   position: relative;
-  transition: all 0.1s ease-out;
 }
 
 .site-link:hover {
   background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.27), 0 3px 1px -2px rgba(0, 0, 0, 0.4),
+    0 1px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
 .site-link:focus {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.site.site-removal-intended {
-  opacity: 0.3;
-  background: red;
-}
-
-.site-link:hover {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.27), 0 3px 1px -2px rgba(0, 0, 0, 0.4),
-    0 1px 5px 0 rgba(0, 0, 0, 0.24);
+.site-link.site-removal-intended {
+  background: rgba(255, 0, 0, 0.3);
 }
 
 .site-favicon {
@@ -80,11 +74,12 @@ html {
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 18px;
+  font-size: 20px;
   border: none;
   background: transparent;
   color: inherit;
 }
+
 .site-remove:after {
   content: "\00D7";
 }

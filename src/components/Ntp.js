@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SitesContainer from "../components/SitesContainer";
 import TopSite from "../components/topSite";
 import Recent from "../components/recent";
@@ -14,6 +14,7 @@ export default function Ntp() {
   const [topSites, setTopSites] = useState(placeHolderSites);
   const [recents, setRecents] = useState(placeHolderSites);
   const [filter, setFilter] = useState("");
+  const filterInputRef = useRef(null);
 
   const updateTopSites = () => {
     chrome.extension.sendMessage({ purpose: "getTopSites" }, response => {
@@ -32,11 +33,24 @@ export default function Ntp() {
   useEffect(() => {
     updateTopSites();
     updateRecents();
+
+    window.addEventListener("keydown", event => {
+      if (
+        event.target.tagName.toLowerCase() === "input" ||
+        !filterInputRef.current ||
+        ["Tab", "Enter"].includes(event.key)
+      ) {
+        return;
+      }
+
+      filterInputRef.current.focus();
+    });
   }, []);
 
   return (
     <div>
       <input
+        ref={filterInputRef}
         className="filter-input"
         onChange={event => {
           setFilter(event.target.value);
