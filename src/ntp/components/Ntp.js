@@ -24,9 +24,13 @@ export default function Ntp() {
   };
 
   const updateRecents = () => {
-    chrome.extension.sendMessage({ purpose: "getRecents" }, response => {
-      var sites = response.sites || [];
-      setRecents(sites);
+    chrome.storage.sync.get(["folder"], ({ folder }) => {
+      chrome.bookmarks.getSubTree(folder || "1", tree => {
+        if (chrome.runtime.lastError || tree.length === 0) {
+          return setRecents([]);
+        }
+        setRecents(tree[0].children.filter(child => Boolean(child.url)));
+      });
     });
   };
 
@@ -70,11 +74,11 @@ export default function Ntp() {
         if (recents.length > 0) {
           return (
             <div>
-              <h2>Recents</h2>
+              <h2>Bookmarks</h2>
               <SitesContainer
                 filter={filter}
                 sites={recents}
-                limit={9}
+                limit={15}
                 site={Recent}
                 onRemove={recentId => {
                   chrome.extension.sendMessage(
